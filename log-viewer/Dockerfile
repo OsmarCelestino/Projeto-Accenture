@@ -5,7 +5,7 @@ FROM node:14
 WORKDIR /app
 
 # Copia os arquivos de dependências e instala as dependências
-COPY log-viewer/package.json log-viewer/package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 
 # Copia os arquivos do projeto
@@ -15,4 +15,4 @@ COPY . .
 RUN npm run build
 
 # Serve a aplicação usando um servidor HTTP simples
-CMD ["npx", "serve", "-s", "build", "-l", "80"]
+CMD ["npx", "serve", "-s", "build", "-l", "3000"]

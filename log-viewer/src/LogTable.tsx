@@ -87,6 +87,7 @@ function LogTable(): JSX.Element {
             </Grid>
             <Grid item xs={3}>
               <TextField
+                id='filtrarTeste'
                 label="Filtrar Mensagem"
                 variant="outlined"
                 fullWidth
@@ -95,10 +96,10 @@ function LogTable(): JSX.Element {
               />
             </Grid>
             <Grid item spacing={2} xs={3}>
-              <Button startIcon={<SearchIcon />} variant="contained" color="primary" onClick={fetchFilteredLogs} style={{ marginRight: '8px' }}>
+              <Button startIcon={<SearchIcon />} variant="contained" id='filtrarButton' color="primary" onClick={fetchFilteredLogs} style={{ marginRight: '8px' }}>
                 Filtrar
               </Button>
-              <Button startIcon={<ClearIcon />} variant="outlined" color="primary" onClick={handleClearFilters}>
+              <Button startIcon={<ClearIcon />} id='limparButton' variant="outlined" color="primary" onClick={handleClearFilters}>
                 Limpar
               </Button>
              

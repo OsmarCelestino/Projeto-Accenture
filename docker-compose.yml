@@ -1,6 +1,14 @@
 version: '3.8'
+
 services:
   web:
+    build: ./log-viewer
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+
+  api:
     build: .
     ports:
       - "8000:80"
@@ -17,5 +25,3 @@ services:
 
 volumes:
   mongo-data:
-  mongo-test-data:
-
