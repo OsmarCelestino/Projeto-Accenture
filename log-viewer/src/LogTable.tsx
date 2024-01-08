@@ -1,10 +1,27 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { CircularProgress, TextField, Button, Container, Paper, Box, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
+import React, { useState } from "react";
+import axios from "axios";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { Typography } from '@mui/material';
+
+import {
+  CircularProgress,
+  TextField,
+  Button,
+  Container,
+  Paper,
+  Box,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 
 interface Log {
   _id: string;
@@ -17,6 +34,7 @@ interface Log {
 function LogTable(): JSX.Element {
   const [logs, setLogs] = useState<Log[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchPerformed, setSearchPerformed] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [messageFilter, setMessageFilter] = useState("");
@@ -25,10 +43,17 @@ function LogTable(): JSX.Element {
 
   const fetchFilteredLogs = () => {
     setIsLoading(true);
+    setSearchPerformed(true);
     const params = {
-        start_date: (startDate instanceof Date && !isNaN(startDate.getTime())) ? startDate.toISOString() : "",
-        end_date: (endDate instanceof Date && !isNaN(endDate.getTime())) ? endDate.toISOString() : "",
-        message_contains: messageFilter,
+      start_date:
+        startDate instanceof Date && !isNaN(startDate.getTime())
+          ? startDate.toISOString()
+          : "",
+      end_date:
+        endDate instanceof Date && !isNaN(endDate.getTime())
+          ? endDate.toISOString()
+          : "",
+      message_contains: messageFilter,
     };
 
     axios
@@ -53,23 +78,33 @@ function LogTable(): JSX.Element {
   const handleClearFilters = () => {
     setStartDate(null);
     setEndDate(null);
-    setMessageFilter('');
+    setMessageFilter("");
     setLogs([]);
+    setSearchPerformed(false);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 25));
     setPage(0);
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Container   sx={{ mt: 4, mb: 4,  width:'2000px' }}>
-        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', background: '#f5f5f5' }}>
+      <Container sx={{ mt: 4, mb: 4, width: "2000px" }}>
+        <Paper
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            background: "#f5f5f5",
+          }}
+        >
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={3}>
               <DatePicker
@@ -87,7 +122,7 @@ function LogTable(): JSX.Element {
             </Grid>
             <Grid item xs={3}>
               <TextField
-                id='filtrarTeste'
+                id="filtrarTeste"
                 label="Filtrar Mensagem"
                 variant="outlined"
                 fullWidth
@@ -96,45 +131,76 @@ function LogTable(): JSX.Element {
               />
             </Grid>
             <Grid item spacing={2} xs={3}>
-              <Button startIcon={<SearchIcon />} variant="contained" id='filtrarButton' color="primary" onClick={fetchFilteredLogs} style={{ marginRight: '8px' }}>
+              <Button
+                startIcon={<SearchIcon />}
+                variant="contained"
+                id="filtrarButton"
+                color="primary"
+                onClick={fetchFilteredLogs}
+                style={{ marginRight: "8px" }}
+              >
                 Filtrar
               </Button>
-              <Button startIcon={<ClearIcon />} id='limparButton' variant="outlined" color="primary" onClick={handleClearFilters}>
+              <Button
+                startIcon={<ClearIcon />}
+                id="limparButton"
+                variant="outlined"
+                color="primary"
+                onClick={handleClearFilters}
+              >
                 Limpar
               </Button>
-             
             </Grid>
             <Grid item xs={3}>
-              <Button  color="secondary" variant="contained" onClick={processLogs} style={{ marginBottom: '10px' }}>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={processLogs}
+                style={{ marginBottom: "10px" }}
+              >
                 Processar Logs
               </Button>
             </Grid>
           </Grid>
-          
+
           {isLoading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
               <CircularProgress />
             </Box>
-          ) : logs.length > 0 && (
-            <TableContainer component={Paper}>                
+          ) : logs.length > 0 ? (
+            <TableContainer component={Paper}>
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
                     <TableCell>IP</TableCell>
-                    <TableCell sx={{ minWidth: '150px' }} align="right">Data</TableCell>
+                    <TableCell sx={{ minWidth: "150px" }} align="right">
+                      Data
+                    </TableCell>
                     <TableCell align="right">Descrição da Atividade</TableCell>
-                    <TableCell align="right" sx={{ minWidth: '200px' }}>Mensagem Adicional</TableCell>
+                    <TableCell align="right" sx={{ minWidth: "200px" }}>
+                      Mensagem Adicional
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {logs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((log) => (
-                    <TableRow key={log._id}>
-                      <TableCell component="th" scope="row">{log.ip}</TableCell>
-                      <TableCell align="right" sx={{ minWidth: '150px' }}>{new Date(log.date).toLocaleString()}</TableCell>
-                      <TableCell align="right">{log.activity_description}</TableCell>
-                      <TableCell align="right" sx={{ minWidth: '200px' }}>{log.additional_message}</TableCell>
-                    </TableRow>
-                  ))}
+                  {logs
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((log) => (
+                      <TableRow key={log._id}>
+                        <TableCell component="th" scope="row">
+                          {log.ip}
+                        </TableCell>
+                        <TableCell align="right" sx={{ minWidth: "150px" }}>
+                          {new Date(log.date).toLocaleString()}
+                        </TableCell>
+                        <TableCell align="right">
+                          {log.activity_description}
+                        </TableCell>
+                        <TableCell align="right" sx={{ minWidth: "200px" }}>
+                          {log.additional_message}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
               <TablePagination
@@ -146,9 +212,11 @@ function LogTable(): JSX.Element {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
             </TableContainer>
-          )}
-
-    
+          ) : searchPerformed ? (
+            <Typography sx={{ textAlign: "center", my: 2 }}>
+              Não foram encontrados dados na pesquisa.
+            </Typography>
+          ) : null}
         </Paper>
       </Container>
     </LocalizationProvider>

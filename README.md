@@ -7,8 +7,6 @@ Este projeto processa logs da pasta Log, armazena no banco de dados NoSQL MongoD
 Antes de começar, certifique-se de ter instalado:
 
 - Docker e Docker Compose
-- Node.js e npm ou Yarn
-- Python 3.x
 
 ## Executando o Sistema
 

@@ -1,11 +1,12 @@
 from mongoengine import connect
 from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
 from mongoengine.connection import get_connection
+import os
 
 class DatabaseConnector:
-    __db_name = "security_logs"
-    __db_host = "mongo"
-    __db_port = 27017
+    __db_name = os.getenv('DB_NAME', 'security_logs')
+    __db_host = os.getenv('DB_HOST', 'mongo')
+    __db_port = int(os.getenv('DB_PORT', 27017))
 
     @staticmethod
     def initialize_connection():
