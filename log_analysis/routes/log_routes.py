@@ -12,7 +12,7 @@ from pymongo.errors import OperationFailure
 
 router = APIRouter()
 
-
+#processa os logs usando uma função do service
 @router.post("/logs/process-logs/")
 def process_logs():
     if not DatabaseConnector.is_connected():
@@ -24,10 +24,11 @@ def process_logs():
     except Exception as e:
         return {"error": str(e)}
     
+#limpa o bd pra poder auxiliar nos testes, caso deseje fazer as operações mais de uma vez
 @router.post("/database/clear")
 def clear_database():
     try:
-        db_name = "security_logs"  # substitua pelo nome do seu banco de dados
+        db_name = "security_logs"  
         # Usando a conexão existente
         db_client = get_connection()
         db_client.drop_database(db_name)
@@ -42,7 +43,7 @@ def clear_database():
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erro ao tentar limpar o banco de dados: {e}"
         )
-
+#filtra os  dados usando uma função do service
 @router.post("/logs/get/")
 def get_logs(filter: Optional[LogFilter] = None):
     if not DatabaseConnector.is_connected():

@@ -14,13 +14,14 @@ Antes de começar, certifique-se de ter instalado:
 
 Para iniciar todo o sistema, incluindo backend e frontend, siga os passos abaixo:
 
-bash
-# Iniciar os serviços com Docker Compose
-docker-compose up -d
 
-# Configurar e iniciar o frontend React
-cd log-viewer
-npm install
-npm start
+# Iniciar os serviços com Docker Compose
+docker-compose up ou docker-compose up -d
+
 # Testes do backend com pytest
-docker-compose run --rm web pytest
+docker-compose run --rm api pytest
+
+# Teste frontend React
+npx cypress open
+
+
