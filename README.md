@@ -22,4 +22,9 @@ docker-compose run --rm api pytest
 # Teste frontend React
 npx cypress open
 
+# Documentação swagger
+
+disponivél no link 
+
+http://127.0.0.1:8000/docs
 

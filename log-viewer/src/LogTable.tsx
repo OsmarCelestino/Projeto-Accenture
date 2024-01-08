@@ -39,7 +39,7 @@ function LogTable(): JSX.Element {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [messageFilter, setMessageFilter] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
 
   const fetchFilteredLogs = () => {
     setIsLoading(true);
@@ -90,7 +90,7 @@ function LogTable(): JSX.Element {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 25));
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
